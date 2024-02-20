@@ -29,8 +29,12 @@ class ChessPiece(ABC):
             return False
         elif not 0 <= move.to_row <= 8 or 0 <= move.to_col <= 8:
             return False
-        elif board[move.from_row][move.from_col] != None:
-            pass
+        elif board[move.from_row][move.from_col] == None:
+            return False
+        elif board[move.to_row][move.to_col] is not self.__player.name:
+            return True
+        else:
+            return True
 
 
 
