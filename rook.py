@@ -1,5 +1,8 @@
+from enum import Enum
+
 from chess_piece import ChessPiece
 from move import Move
+from pawn import Pawn
 
 
 class Rook(ChessPiece):
@@ -15,35 +18,32 @@ class Rook(ChessPiece):
         return f'Rook'
 
     def is_valid_move(self, move: Move, board) -> bool:
-        if move.from_col == move.to_col and move.from_row == move.to_row:
-            return False
-        elif not 0 <= move.to_row <= 8 or 0 <= move.to_col <= 8:
+        if not 0 <= move.to_row <= 8 or not 0 <= move.to_col <= 8:
             return False
         elif board[move.from_row][move.from_col] is None:
             return False
-        elif board[move.to_row][move.to_col] is not self.__player.name:
-            #In this function, check whether path in chosen direction is clear
+        elif board[move.to_row][move.to_col] is not self.player.name:
             if (move.to_col - move.from_col != 0) and (move.to_row - move.from_row == 0):
-                # Moving Vertically
+                # Moving Horizontally
                 if move.to_col - move.from_col > 0:
-                    for i in range(move.from_col,move.to_col-1):
+                    for i in range(move.from_col+1,move.to_col-1):
                         if board[move.from_row][i] is not None:
                             return False
                     return True
                 else:
-                    for i in range(move.from_col,move.to_col+1):
+                    for i in range(move.from_col-1,move.to_col+1):
                         if board[move.from_row][i] is not None:
                             return False
                     return True
             elif (move.to_col - move.from_col == 0) and (move.to_row - move.from_row != 0):
-                # Moving Horizontally
+                # Moving Vertically
                 if move.to_row - move.from_row > 0:
-                    for i in range(move.from_row,move.to_row-1):
+                    for i in range(move.from_row+1,move.to_row-1):
                         if board[i][move.from_col] is not None:
                             return False
                     return True
                 else:
-                    for i in range(move.from_row,move.to_row+1):
+                    for i in range(move.from_row-1,move.to_row+1):
                         if board[i][move.from_col] is not None:
                             return False
                     return True
@@ -53,10 +53,19 @@ class Rook(ChessPiece):
         else:
             return True
 
-
-c = Rook(1)
-m = Move(1,1,2,2)
-print(c.is_valid_move(m,[[Rook,Rook][Rook,None]]))
-c.player = 2
-print(c.player)
+class x(Enum):
+    WHITE = 0
+    BLACK = 1
+c = Rook(x.WHITE)
+p = Pawn(x.BLACK)
+m = Move(0,3,5,3)
+board = [[None,None,None,c,None,None,None,None],
+        [None,None,None,None,p   ,None,None,None],
+        [p,None,None,None,None,p,None,None],
+        [None,None,None,None,None,None,p,None],
+        [None,None,c,None,None,None,None,None],
+        [None,None,None,c,None,None,None,None],
+        [None,None,None,None,c   ,None,None,None],
+        [None,None,None,None,None,None,None,None]]
+print(c.is_valid_move(m,board))
 
