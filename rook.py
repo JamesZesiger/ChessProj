@@ -52,7 +52,7 @@ class Rook(ChessPiece):
                 return False
         else:
             return True
-
+'''
 class x(Enum):
     WHITE = 0
     BLACK = 1
@@ -68,4 +68,4 @@ board = [[None,None,None,c,None,None,None,None],
         [None,None,None,None,c   ,None,None,None],
         [None,None,None,None,None,None,None,None]]
 print(c.is_valid_move(m,board))
-
+'''
