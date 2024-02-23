@@ -27,7 +27,7 @@ class King(ChessPiece):
                 return False
             else:
                 return True
-# test
+'''
 class x(Enum):
     WHITE = 0
     BLACK = 1
@@ -44,4 +44,4 @@ print(w.is_valid_move(m,board))
 print(b.is_valid_move(m2,board))
 print(w.player.name, w.player.value)
 print(w.type())
-
+'''
