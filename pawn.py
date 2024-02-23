@@ -58,7 +58,7 @@ class Pawn(ChessPiece):
             return False
 
 
-# test
+'''
 class x(Enum):
     WHITE = 0
     BLACK = 1
@@ -77,4 +77,4 @@ board = [[None,None,None,None,None,None,None,None],
 print(w.is_valid_move(m,board))
 print(b.is_valid_move(m2,board))
 print(w.player.name, w.player.value)
-
+'''
