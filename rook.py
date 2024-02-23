@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import List
 
 from chess_piece import ChessPiece
 from move import Move
@@ -17,12 +18,8 @@ class Rook(ChessPiece):
     def type(self):
         return f'Rook'
 
-    def is_valid_move(self, move: Move, board) -> bool:
-        if not 0 <= move.to_row <= 8 or not 0 <= move.to_col <= 8:
-            return False
-        elif board[move.from_row][move.from_col] is None:
-            return False
-        elif board[move.to_row][move.to_col] is not self.player.name:
+    def is_valid_move(self, move: Move, board: List[List[ChessPiece]]):
+        if ChessPiece.is_valid_move(self,move,board):
             if (move.to_col - move.from_col != 0) and (move.to_row - move.from_row == 0):
                 # Moving Horizontally
                 if move.to_col - move.from_col > 0:
@@ -38,7 +35,7 @@ class Rook(ChessPiece):
             elif (move.to_col - move.from_col == 0) and (move.to_row - move.from_row != 0):
                 # Moving Vertically
                 if move.to_row - move.from_row > 0:
-                    for i in range(move.from_row+1,move.to_row-1):
+                    for i in range(move.from_row+1,move.to_row):
                         if board[i][move.from_col] is not None:
                             return False
                     return True
