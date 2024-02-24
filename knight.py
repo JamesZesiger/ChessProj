@@ -24,6 +24,8 @@ class Knight(ChessPiece):
                     return False
                 elif ydist > 2:
                     return False
+                else:
+                    return True
             else:
                 return False
 

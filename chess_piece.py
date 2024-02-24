@@ -27,7 +27,7 @@ class ChessPiece(ABC):
     def is_valid_move(self, move: Move, board):  #deleted type hint
         if move.from_col == move.to_col and move.from_row == move.to_row:
             return False
-        elif not 0 <= move.to_row <= 8 or 0 <= move.to_col <= 8:
+        elif not (0 <= move.to_row <= 8 or 0 <= move.to_col <= 8):
             return False
         elif board[move.from_row][move.from_col] == None:
             return False
