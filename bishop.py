@@ -48,6 +48,8 @@ class Bishop(ChessPiece):
                     return True
             else:
                 return False
+        else:
+            return False
 
 
 class x(Enum):

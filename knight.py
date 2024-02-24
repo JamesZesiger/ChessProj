@@ -28,6 +28,8 @@ class Knight(ChessPiece):
                     return True
             else:
                 return False
+        else:
+            return False
 
 
 '''
