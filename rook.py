@@ -48,7 +48,9 @@ class Rook(ChessPiece):
                 # Not moving Vertically or Horizontally
                 return False
         else:
-            return True
+            return False
+
+
 '''
 class x(Enum):
     WHITE = 0
