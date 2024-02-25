@@ -18,32 +18,27 @@ class Queen(ChessPiece):
 
     def is_valid_move(self, move: Move, board) -> bool:
         if ChessPiece.is_valid_move(self, move, board):
-            r = Rook(self.player)
-            b = Bishop(self.player)
-            if r.is_valid_move(move, board) or b.is_valid_move(move, board):
+            if Rook.is_valid_move(self, move, board) or Bishop.is_valid_move(self, move, board):
                 return True
-            else:
-                return False
         else:
             return False
 
 
+"""
 class x(Enum):
     WHITE = 0
     BLACK = 1
-
-
-q = Queen(x.WHITE)
-p = Rook(x.BLACK)
-m = Move(0,3,0,0)
-board = [[None,None,None,q,None,None,None,None],
+c = Rook(x.WHITE)
+p = Pawn(x.BLACK)
+m = Move(0,3,5,3)
+board = [[None,None,None,c,None,None,None,None],
         [None,None,None,None,p   ,None,None,None],
         [p,None,None,None,None,p,None,None],
         [None,None,None,None,None,None,p,None],
-        [None,None,q,None,None,None,None,None],
-        [None,None,None,q,None,None,None,None],
-        [None,None,None,None,q,None,None,None],
+        [None,None,c,None,None,None,None,None],
+        [None,None,None,c,None,None,None,None],
+        [None,None,None,None,c   ,None,None,None],
         [None,None,None,None,None,None,None,None]]
-print(q.is_valid_move(m,board))
-
+print(c.is_valid_move(m,board))
+"""
 

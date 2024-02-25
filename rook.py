@@ -23,12 +23,12 @@ class Rook(ChessPiece):
             if (move.to_col - move.from_col != 0) and (move.to_row - move.from_row == 0):
                 # Moving Horizontally
                 if move.to_col - move.from_col > 0:
-                    for i in range(move.from_col+1,move.to_col):
+                    for i in range(move.from_col+1,move.to_col-1):
                         if board[move.from_row][i] is not None:
                             return False
                     return True
                 else:
-                    for i in range(move.from_col-1,move.to_col):
+                    for i in range(move.from_col-1,move.to_col+1):
                         if board[move.from_row][i] is not None:
                             return False
                     return True
@@ -40,7 +40,7 @@ class Rook(ChessPiece):
                             return False
                     return True
                 else:
-                    for i in range(move.from_row-1,move.to_row):
+                    for i in range(move.from_row-1,move.to_row+1):
                         if board[i][move.from_col] is not None:
                             return False
                     return True
@@ -48,9 +48,7 @@ class Rook(ChessPiece):
                 # Not moving Vertically or Horizontally
                 return False
         else:
-            return False
-
-
+            return True
 '''
 class x(Enum):
     WHITE = 0

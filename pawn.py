@@ -14,7 +14,7 @@ class Pawn(ChessPiece):
         return f'player is {self.player}'
 
     def type(self):
-        return f'Pawn'
+        return 'Pawn'
 
     def is_valid_move(self, move: Move, board: List[List[ChessPiece]]):
         if ChessPiece.is_valid_move(self, move, board):
@@ -58,23 +58,5 @@ class Pawn(ChessPiece):
             return False
 
 
-'''
-class x(Enum):
-    WHITE = 0
-    BLACK = 1
-w = Pawn(x.WHITE)
-b = Pawn(x.BLACK)
-m = Move(1,4,2,3)
-m2 = Move(3,6,3,7)
-board = [[None,None,None,None,None,None,None,None],
-        [None,None,None,None,w   ,None,None,None],
-        [None,None,None,None,None,w,None,None],
-        [None,None,None,None,None,None,b,None],
-        [None,None,w,None,None,None,None,None],
-        [None,None,None,b,None,None,None,None],
-        [None,None,None,None,b   ,None,None,None],
-        [None,None,None,None,None,None,None,None]]
-print(w.is_valid_move(m,board))
-print(b.is_valid_move(m2,board))
-print(w.player.name, w.player.value)
-'''
+
+
