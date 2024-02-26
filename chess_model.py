@@ -49,7 +49,8 @@ class ChessModel:
         bb = Bishop(Player.BLACK)
         bn = Knight(Player.BLACK)
         bq = Queen(Player.BLACK)
-        self.undo_board = [[wr,wn,wb,wq,wk  ,wb,wn,wr],
+
+        self.board = [[wr,wn,wb,wq,wk  ,wb,wn,wr],
                 [wp  ,wp  ,wp  ,wp  ,wp  ,wp  ,wp  ,wp  ],
                 [None,None,None,None,None,None,None,None],
                 [None,None,None,None,None,None,None,None],
@@ -57,8 +58,7 @@ class ChessModel:
                 [None,None,None,None,None,None,None,None],
                 [bp  ,bp  ,bp  ,bp  ,bp  ,bp  ,bp  ,bp  ],
                 [br,bn,bb,bq,bk  ,bb,bn,br]]
-        self.board = list(self.undo_board)
-
+        self.undo_board = [deepcopy(self.board)]
         self.__player = Player.WHITE
         self.__nrows = 8
         self.__ncols = 8
@@ -122,10 +122,10 @@ class ChessModel:
 
     def move(self, move: Move):
         piece = self.board[move.from_row][move.from_col]
-        self.undo_board = deepcopy(self.board)
         self.board[move.from_row][move.from_col] = None
         self.board[move.to_row][move.to_col] = piece
-        print(self.board, self.undo_board)
+        self.undo_board.append(deepcopy(self.board))
+        self.set_next_player()
     def in_check(self,p: Player):
         for y in range(len(self.board)):
             for x in range(len(self.board[y])):
@@ -147,10 +147,11 @@ class ChessModel:
         return self.__player
 
     def piece_at(self,row: int, col: int):
-        return self.board[row][col]
+        if 0 <= row < 8 and 0 <= col < 8:
+            return self.board[row][col]
 
     def set_next_player(self):
-        if self.current_player.name == 'WHITE':
+        if self.current_player().name == 'WHITE':
             self.__player = Player.BLACK
         else:
             self.__player = Player.WHITE
@@ -159,7 +160,9 @@ class ChessModel:
         self.board[row][col] = piece
 
     def undo(self):
-        self.board = self.undo_board
+        del self.undo_board[-1]
+        self.board = self.undo_board[-1]
+
 
 """
 wk = King(Player.WHITE)
