@@ -107,13 +107,7 @@ class ChessModel:
                     self.__message_code = MoveValidity.StayingInCheck
                     return False
             if piece.is_valid_move(move,self.board):
-
-                if self.in_check(self.current_player):
-                    self.__message_code = MoveValidity.MovingIntoCheck
-                    return False
-                else:
-                    self.__message_code = MoveValidity.Valid
-                    return True
+                return True
 
             else:
                 self.__message_code = MoveValidity.Invalid

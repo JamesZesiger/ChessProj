@@ -19,11 +19,12 @@ class King(ChessPiece):
     def is_valid_move(self, move: Move, board: List[List[ChessPiece]]):
         if ChessPiece.is_valid_move(self, move, board):
             xdist = abs(move.to_col - move.from_col)
-            if xdist > 1:
-                return False
             ydist = abs(move.to_row - move.from_row)
-            if ydist > 1:
-                return False
-            else:
-                return True
+            if xdist < 2 and ydist < 2:
+                if board[move.to_row][move.to_col] is not None:
+                    if board[move.to_row][move.to_col].player.name is not self.player.name:
+                        return True
+                else:
+                    return True
+            return False
 

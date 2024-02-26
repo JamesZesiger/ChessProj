@@ -20,8 +20,15 @@ class Rook(ChessPiece):
 
     def is_valid_move(self, move: Move, board: List[List[ChessPiece]]):
         if ChessPiece.is_valid_move(self,move,board):
+            xdist = abs(move.to_col - move.from_col)
+            ydist = abs(move.to_row - move.from_row)
             if (move.to_col - move.from_col != 0) and (move.to_row - move.from_row == 0):
                 # Moving Horizontally
+                if xdist == 1:
+                    if board[move.to_row][move.to_col].player.name is not self.player.name:
+                        return True
+                    else:
+                        return False
                 if move.to_col - move.from_col > 0:
                     for i in range(move.from_col+1,move.to_col-1):
                         if board[move.from_row][i] is not None:
@@ -34,10 +41,20 @@ class Rook(ChessPiece):
                     return True
             elif (move.to_col - move.from_col == 0) and (move.to_row - move.from_row != 0):
                 # Moving Vertically
-                if move.to_row - move.from_row > 0:
-                    for i in range(move.from_row+1,move.to_row):
-                        if board[i][move.from_col] is not None:
-                            return False
+                if ydist == 1:
+                    if board[move.to_row][move.to_col].player.name is not self.player.name:
+                        return True
+                    else:
+                        return False
+                if abs(move.to_row - move.from_row) > 0:
+                    if self.player.name == 'WHITE':
+                        for i in range(move.from_row+1,move.to_row):
+                            if board[i][move.from_col] is not None:
+                                return False
+                    else:
+                        for i in range(move.to_row+1,move.from_row):
+                            if board[i][move.from_col] is not None:
+                                return False
                     return True
                 else:
                     for i in range(move.from_row-1,move.to_row+1):
