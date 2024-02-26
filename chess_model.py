@@ -126,6 +126,7 @@ class ChessModel:
         self.board[move.to_row][move.to_col] = piece
         self.undo_board.append(deepcopy(self.board))
         self.set_next_player()
+
     def in_check(self,p: Player):
         for y in range(len(self.board)):
             for x in range(len(self.board[y])):
@@ -160,8 +161,11 @@ class ChessModel:
         self.board[row][col] = piece
 
     def undo(self):
-        del self.undo_board[-1]
-        self.board = self.undo_board[-1]
+        if len(self.undo_board) == 1:
+            raise UndoException
+        else:
+            del self.undo_board[-1]
+            self.board = self.undo_board[-1]
 
 
 """
