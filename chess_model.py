@@ -103,12 +103,12 @@ class ChessModel:
         piece = self.board[move.from_row][move.from_col]
         if piece is not None:
             if not isinstance(piece,King):
-                if self.in_check(self.current_player()):
+                if self.in_check(self.current_player):
                     self.__message_code = MoveValidity.StayingInCheck
                     return False
             if piece.is_valid_move(move,self.board):
 
-                if self.in_check(self.current_player()):
+                if self.in_check(self.current_player):
                     self.__message_code = MoveValidity.MovingIntoCheck
                     return False
                 else:
@@ -144,15 +144,14 @@ class ChessModel:
                                 return True
         return False
 
-    def current_player(self):
-        return self.__player
+
 
     def piece_at(self,row: int, col: int):
         if 0 <= row < 8 and 0 <= col < 8:
             return self.board[row][col]
 
     def set_next_player(self):
-        if self.current_player().name == 'WHITE':
+        if self.current_player.name == 'WHITE':
             self.__player = Player.BLACK
         else:
             self.__player = Player.WHITE
@@ -164,8 +163,10 @@ class ChessModel:
         if len(self.undo_board) == 1:
             raise UndoException
         else:
-            del self.undo_board[-1]
-            self.board = self.undo_board[-1]
+            if len(self.undo_board) > 1:
+                del self.undo_board[-1]
+            self.board = deepcopy(self.undo_board[-1])
+            self.set_next_player()
 
 
 """

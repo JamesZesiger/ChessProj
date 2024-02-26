@@ -70,7 +70,7 @@ class GUI:
                     y, x = self.__get_coords__(y, x)
                     piece = self.__model.piece_at(y, x)
                     if not self._piece_selected and piece:
-                        if piece.player != self.__model.current_player():
+                        if piece.player != self.__model.current_player:
                             msg = 'Not your turn!'
                             self._side_box.append_html_text(msg + '<br />')
                         else:
@@ -90,7 +90,7 @@ class GUI:
                         
                         else:
                             self._side_box.append_html_text(f'{self.__model.messageCode}<br />')
-                        incheck = self.__model.in_check(self.__model.current_player())
+                        incheck = self.__model.in_check(self.__model.current_player)
                         complete = self.__model.is_complete()
 
                         if incheck:
