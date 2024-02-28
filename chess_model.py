@@ -50,22 +50,15 @@ class ChessModel:
         bn = Knight(Player.BLACK)
         bq = Queen(Player.BLACK)
 
-        '''self.board = [[wr,wn,wb,wq,wk  ,wb,wn,wr],
+        self.board = [[wr,wn,wb,wq,wk  ,wb,wn,wr],
                 [wp  ,wp  ,wp  ,wp  ,wp  ,wp  ,wp  ,wp  ],
                 [None,None,None,None,None,None,None,None],
                 [None,None,None,None,None,None,None,None],
                 [None,None,None,None,None,None,None,None],
                 [None,None,None,None,None,None,None,None],
                 [bp  ,bp  ,bp  ,bp  ,bp  ,bp  ,bp  ,bp  ],
-                [br,bn,bb,bq,bk  ,bb,bn,br]]'''
-        self.board = [[bk, None, None, None, None, None, None, None],
-                          [None, None, None, None, None, None, None, wr],
-                      [None, None, None, None, None, None, wq, None],
-                      [None, None, bq, None, None, wp, None, None],
-                      [None, None, None, bp, None, None, None, None],
-                      [None, None, None, None, None, None, None, None],
-                      [None, None, None, None, None, None, None, None],
-                      [None, None, None, None, None, None, None, wk]]
+                [br,bn,bb,bq,bk  ,bb,bn,br]]
+
         self.undo_board = [deepcopy(self.board)]
         self.__player = Player.WHITE
         self.__nrows = 8
@@ -148,7 +141,7 @@ class ChessModel:
         self.__message_code = MoveValidity.Invalid
         return False
 
-        
+
     def move(self, move: Move):
         piece = self.board[move.from_row][move.from_col]
         self.board[move.from_row][move.from_col] = None
