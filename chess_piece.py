@@ -24,17 +24,17 @@ class ChessPiece(ABC):
     def type(self):
         pass
 
-    def is_valid_move(self, move: Move, board):  #deleted type hint
+    def is_valid_move(self, move: Move, board):  # deleted type hint
         if move.from_col == move.to_col and move.from_row == move.to_row:
             return False
-        elif not (0 <= move.to_row <= 8 or 0 <= move.to_col <= 8):
+        elif 0 > move.to_row > 7 or 0 > move.to_col > 7:
             return False
-        elif board[move.from_row][move.from_col] == None:
+        elif board[move.from_row][move.from_col] is None:
             return False
-        elif board[move.to_row][move.to_col] is not self.__player.name:
-            return True
-        else:
-            return True
+        elif board[move.to_row][move.to_col] is not None:
+            if board[move.to_row][move.to_col].player.name is self.player.name:
+                return False
+        return True
 
 
 

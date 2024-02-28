@@ -17,6 +17,7 @@ class Pawn(ChessPiece):
         return 'Pawn'
 
     def is_valid_move(self, move: Move, board: List[List[ChessPiece]]):
+
         if ChessPiece.is_valid_move(self, move, board):
             xdist = abs(move.to_col - move.from_col)
             if xdist > 1:
@@ -31,6 +32,8 @@ class Pawn(ChessPiece):
                         return False
                     elif board[move.to_row][move.to_col].player.name is self.player.name:
                         return False
+                elif board[move.to_row][move.to_col] != None:
+                        return False
                 if ydist < 0:
                     return False
                 if move.from_row == 1:
@@ -38,6 +41,7 @@ class Pawn(ChessPiece):
                         return False
                 elif ydist > 1:
                         return False
+
             if self.player.name == 'BLACK':
                 if xdist == 1 and ydist != -1:
                     return False
@@ -45,6 +49,8 @@ class Pawn(ChessPiece):
                     if board[move.to_row][move.to_col] == None:
                         return False
                     elif board[move.to_row][move.to_col].player.name is self.player.name:
+                        return False
+                elif board[move.to_row][move.to_col] != None:
                         return False
                 if ydist > 0:
                     return False

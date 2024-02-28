@@ -50,22 +50,14 @@ class ChessModel:
         bn = Knight(Player.BLACK)
         bq = Queen(Player.BLACK)
 
-        '''self.board = [[wr,wn,wb,wq,wk  ,wb,wn,wr],
+        self.board = [[wr,wn,wb,wq,wk  ,wb,wn,wr],
                 [wp  ,wp  ,wp  ,wp  ,wp  ,wp  ,wp  ,wp  ],
                 [None,None,None,None,None,None,None,None],
                 [None,None,None,None,None,None,None,None],
                 [None,None,None,None,None,None,None,None],
                 [None,None,None,None,None,None,None,None],
                 [bp  ,bp  ,bp  ,bp  ,bp  ,bp  ,bp  ,bp  ],
-                [br,bn,bb,bq,bk  ,bb,bn,br]]'''
-        self.board = [[bk, None, None, None, None, None, None, None],
-                          [None, None, None, None, None, None, None, wr],
-                      [None, None, None, None, None, None, wq, None],
-                      [None, None, bq, None, None, wp, None, None],
-                      [None, None, None, bp, None, None, None, None],
-                      [None, None, None, None, None, None, None, None],
-                      [None, None, None, None, None, None, None, None],
-                      [None, None, None, None, None, None, None, wk]]
+                [br,bn,bb,bq,bk  ,bb,bn,br]]
         self.undo_board = [deepcopy(self.board)]
         self.__player = Player.WHITE
         self.__nrows = 8
@@ -105,56 +97,37 @@ class ChessModel:
         self.__message_code = message
 
     def is_complete(self):
-        for y in range(0,8):
-            for x in range(0, 8):
-                if self.board[y][x] is not None:
-                    if self.board[y][x].player.name is self.current_player.name:
-                        for j in range(0, 8):
-                            for i in range(0, 8):
-                                move = Move(y,x,j,i)
-                                if self.is_valid_move(move):
-                                    return False
-        return True
+        return False
+
     def is_valid_move(self, move: Move):
         piece = self.board[move.from_row][move.from_col]
         if piece is not None:
-            if piece.is_valid_move(move, self.board):
-                if self.in_check(self.current_player): # staying
-                    self.move(move)
-                    self.set_next_player()
-                    if self.in_check(self.current_player):
-                        self.undo()
-                        self.set_next_player()
-                        self.__message_code = MoveValidity.StayingInCheck
-                        return False
-                    else:
-                        self.undo()
-                        self.set_next_player()
-                        self.__message_code = MoveValidity.Valid
-                        return True
+            if not isinstance(piece,King):
+                if self.in_check(self.current_player):
+                    self.__message_code = MoveValidity.StayingInCheck
+                    return False
+            if piece.is_valid_move(move,self.board):
+                self.move(move)
+                if self.in_check(self.current_player):
+                    self.__message_code = MoveValidity.MovingIntoCheck
+                    self.undo()
+                    return False
                 else:
-                    self.move(move)
+                    self.__message_code = MoveValidity.Valid
+                    self.undo()
                     self.set_next_player()
-                    if self.in_check(self.current_player): # moving
-                        self.undo()
-                        self.set_next_player()
-                        self.__message_code = MoveValidity.MovingIntoCheck
-                        return False
-                    else:
-                        self.undo()
-                        self.set_next_player()
-                        self.__message_code = MoveValidity.Valid
-                        return True
-        self.__message_code = MoveValidity.Invalid
-        return False
+                    return True
 
-        
+            else:
+                self.__message_code = MoveValidity.Invalid
+                return False
+
+
     def move(self, move: Move):
         piece = self.board[move.from_row][move.from_col]
         self.board[move.from_row][move.from_col] = None
         self.board[move.to_row][move.to_col] = piece
         self.undo_board.append(deepcopy(self.board))
-        self.set_next_player()
 
     def in_check(self,p: Player):
         for y in range(len(self.board)):
@@ -162,8 +135,9 @@ class ChessModel:
                 if self.board[y][x] != None:
                     if self.board[y][x].player.name == p.name:
                         if self.board[y][x].type()== 'King':
-                            kx = x
-                            ky = y
+                            if self.board[y][x].player.name is p.name:
+                                kx = x
+                                ky = y
         for j in range(len(self.board)):
             for k in range(len(self.board[y])):
                 if self.board[j][k] != None:
@@ -171,7 +145,6 @@ class ChessModel:
                             if self.board[j][k].is_valid_move(Move(j, k, ky, kx),self.board):
                                 return True
         return False
-
 
 
     def piece_at(self,row: int, col: int):
@@ -188,13 +161,12 @@ class ChessModel:
         self.board[row][col] = piece
 
     def undo(self):
-        if len(self.undo_board) == 1:
+        if len(self.undo_board)== 1:
             raise UndoException
         else:
-            if len(self.undo_board) > 1:
-                del self.undo_board[-1]
-            self.board = deepcopy(self.undo_board[-1])
-            self.set_next_player()
+            del self.undo_board[-1]
+            self.board = self.undo_board[-1]
+
 
 
 """
