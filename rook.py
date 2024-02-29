@@ -47,7 +47,7 @@ class Rook(ChessPiece):
                     else:
                         return False
                 if abs(move.to_row - move.from_row) > 0:
-                    if self.player.name == 'WHITE':
+                    if move.to_row > move.from_row:
                         for i in range(move.from_row+1,move.to_row):
                             if board[i][move.from_col] is not None:
                                 return False

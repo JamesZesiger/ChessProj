@@ -52,23 +52,4 @@ class Bishop(ChessPiece):
             return False
 
 
-class x(Enum):
-        WHITE = 0
-        BLACK = 1
-
-
-w = Bishop(x.WHITE)
-b = Bishop(x.BLACK)
-m = Move(0, 1, 2, 3)
-m2 = Move(6, 4, 5, 3)
-board = [[None,w,None,None,None,None,None,None],
-        [None,None,None,None,w,None,None,None],
-        [None,None,None,None,None,w,None,None],
-        [None,None,None,None,None,None,b,None],
-        [None,None,None,None,None,None,None,None],
-        [None,None,None,b,None,None,None,None],
-        [None,None,None,None,b,None,None,None],
-        [None,None,None,None,None,None,None,None]]
-print(w.is_valid_move(m, board))
-print(b.is_valid_move(m2, board))
 

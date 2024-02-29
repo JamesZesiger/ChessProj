@@ -38,32 +38,57 @@ class UndoException(Exception):
 class ChessModel:
     def __init__(self):
         wk = King(Player.WHITE)
-        wp = Pawn(Player.WHITE)
-        wr = Rook(Player.WHITE)
-        wb = Bishop(Player.WHITE)
-        wn = Knight(Player.WHITE)
-        wq = Queen(Player.WHITE)
-        bk = King(Player.BLACK)
-        bp = Pawn(Player.BLACK)
-        br = Rook(Player.BLACK)
-        bb = Bishop(Player.BLACK)
-        bn = Knight(Player.BLACK)
-        bq = Queen(Player.BLACK)
+        wp0 = Pawn(Player.WHITE)
+        wp1 = Pawn(Player.WHITE)
+        wp2 = Pawn(Player.WHITE)
+        wp3 = Pawn(Player.WHITE)
+        wp4 = Pawn(Player.WHITE)
+        wp5 = Pawn(Player.WHITE)
+        wp6 = Pawn(Player.WHITE)
+        wp7 = Pawn(Player.WHITE)
+        wr0 = Rook(Player.WHITE)
+        wr1 = Rook(Player.WHITE)
+        wb0 = Bishop(Player.WHITE)
+        wb1 = Bishop(Player.WHITE)
+        wn0 = Knight(Player.WHITE)
+        wn1 = Knight(Player.WHITE)
+        wq0 = Queen(Player.WHITE)
+        wq1 = Queen(Player.WHITE)
+        bk0 = King(Player.BLACK)
+        bk1 = King(Player.BLACK)
+        bp0 = Pawn(Player.BLACK)
+        bp1 = Pawn(Player.BLACK)
+        bp2 = Pawn(Player.BLACK)
+        bp3 = Pawn(Player.BLACK)
+        bp4 = Pawn(Player.BLACK)
+        bp5 = Pawn(Player.BLACK)
+        bp6 = Pawn(Player.BLACK)
+        bp7 = Pawn(Player.BLACK)
+        br0 = Rook(Player.BLACK)
+        br1 = Rook(Player.BLACK)
+        bb0 = Bishop(Player.BLACK)
+        bb1 = Bishop(Player.BLACK)
+        bn0 = Knight(Player.BLACK)
+        bn1 = Knight(Player.BLACK)
+        bq0 = Queen(Player.BLACK)
 
-        self.board = [[wr,wn,wb,wq,wk  ,wb,wn,wr],
-                [wp  ,wp  ,wp  ,wp  ,wp  ,wp  ,wp  ,wp  ],
+        self.board = [[br0,bn0,bb0,bq0,bk0  ,bb1,bn1,br1],
+                [bp0  ,bp1  ,bp2  ,bp3  ,bp4  ,bp5  ,bp6 ,bp7  ],
                 [None,None,None,None,None,None,None,None],
                 [None,None,None,None,None,None,None,None],
                 [None,None,None,None,None,None,None,None],
                 [None,None,None,None,None,None,None,None],
-                [bp  ,bp  ,bp  ,bp  ,bp  ,bp  ,bp  ,bp  ],
-                [br,bn,bb,bq,bk  ,bb,bn,br]]
+                [wp0  ,wp1  ,wp2  ,wp3  ,wp4  ,wp5  ,wp6 ,wp7  ],
+                [wr0,wn0,wb0,wq0,wk  ,wb1,wn1,wr1]]
 
-        self.undo_board = [deepcopy(self.board)]
+
         self.__player = Player.WHITE
-        self.__nrows = 8
-        self.__ncols = 8
+        self.__nrows = len(self.board)
+        self.__ncols = len(self.board[0])
         self.__message_code = MoveValidity
+        self.from_list = []
+        self.to_list = []
+        self.taken_piece = []
 
     @property
     def nrows(self):
@@ -98,16 +123,27 @@ class ChessModel:
         self.__message_code = message
 
     def is_complete(self):
-        for y in range(0,8):
-            for x in range(0, 8):
-                if self.board[y][x] is not None:
-                    if self.board[y][x].player.name is self.current_player.name:
-                        for j in range(0, 8):
-                            for i in range(0, 8):
-                                move = Move(y,x,j,i)
-                                if self.is_valid_move(move):
-                                    return False
-        return True
+        if not self.in_check(Player.WHITE) and not self.in_check(Player.BLACK):
+            return False
+        for x in range(2):
+            if self.in_check(self.current_player):
+                for y in range(0,8):
+                    for x in range(0, 8):
+                        if self.board[y][x] is not None:
+                            if self.board[y][x].player.name is self.current_player.name:
+                                for j in range(0, 8):
+                                    for i in range(0, 8):
+                                        move = Move(y,x,j,i)
+                                        if self.is_valid_move(move):
+                                            return False
+            self.set_next_player()
+
+        else:
+            return True
+
+        return False
+
+
     def is_valid_move(self, move: Move):
         piece = self.board[move.from_row][move.from_col]
         if piece is not None:
@@ -144,9 +180,21 @@ class ChessModel:
 
     def move(self, move: Move):
         piece = self.board[move.from_row][move.from_col]
+        temp = []
+        temp.append(move.from_row)
+        temp.append(move.from_col)
+        self.from_list.extend(temp)
+        temp = []
+        temp.append(move.to_row)
+        temp.append(move.to_col)
+        self.to_list.extend(temp)
+        self.taken_piece.append(self.board[move.to_row][move.to_col])
         self.board[move.from_row][move.from_col] = None
         self.board[move.to_row][move.to_col] = piece
-        self.undo_board.append(deepcopy(self.board))
+        if move.to_row == 0 or move.to_row == len(self.board)-1:
+            if isinstance(self.board[move.to_row][move.to_col],Pawn):
+                self.board[move.to_row][move.to_col] = None
+                self.board[move.to_row][move.to_col] = Queen(self.current_player)
         self.set_next_player()
 
     def in_check(self,p: Player):
@@ -168,7 +216,7 @@ class ChessModel:
 
 
     def piece_at(self,row: int, col: int):
-        if 0 <= row < 8 and 0 <= col < 8:
+        if 0 <= row < len(self.board) and 0 <= col < len(self.board):
             return self.board[row][col]
 
     def set_next_player(self):
@@ -181,33 +229,14 @@ class ChessModel:
         self.board[row][col] = piece
 
     def undo(self):
-        if len(self.undo_board) == 1:
-            raise UndoException
-        else:
-            if len(self.undo_board) > 1:
-                del self.undo_board[-1]
-            self.board = deepcopy(self.undo_board[-1])
+        if len(self.from_list) > 0:
+            piece = self.board[self.to_list[-2]][self.to_list[-1]]
+            self.board[self.to_list[-2]][self.to_list[-1]] = self.taken_piece[-1]
+            self.board[self.from_list[-2]][self.from_list[-1]] = piece
+
+            del self.to_list[-2],self.to_list[-1],self.from_list[-2],self.from_list[-1],self.taken_piece[-1]
             self.set_next_player()
+        else:
+            raise UndoException
 
 
-"""
-wk = King(Player.WHITE)
-wp = Pawn(Player.WHITE)
-wr = Rook(Player.WHITE)
-bk = King(Player.BLACK)
-bp = Pawn(Player.BLACK)
-br = Rook(Player.BLACK)
-board1 = [[None,None,None,wk,None  ,None,None,None],
-                [wp  ,wp  ,wp  ,wp  ,None  ,wp  ,wp  ,wp  ],
-                [None,None,None,None,None,None,None,None],
-                [None,None,None,None,None,None,None,None],
-                [None,None,None,None,None,None,None,None],
-                [None,None,None,None,None,None,None,None],
-                [bp  ,bp  ,bp  ,bp  ,br  ,bp  ,bp  ,bp  ],
-                [None,None,None,None,bk  ,None,None,None]]
-c = ChessModel()
-print(c.in_check(Player.WHITE))
-move = Move(1,3,3,3)
-c.move(move)
-print(c.in_check(Player.WHITE))
-"""

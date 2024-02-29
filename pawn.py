@@ -24,7 +24,7 @@ class Pawn(ChessPiece):
                 return False
             ydist = (move.to_row - move.from_row)
 
-            if self.player.name == 'WHITE':
+            if self.player.name == 'BLACK':
                 if xdist == 1 and ydist != 1:
                     return False
                 if xdist == 1:
@@ -42,7 +42,7 @@ class Pawn(ChessPiece):
                 elif ydist > 1:
                         return False
 
-            if self.player.name == 'BLACK':
+            if self.player.name == 'WHITE':
                 if xdist == 1 and ydist != -1:
                     return False
                 if xdist == 1:

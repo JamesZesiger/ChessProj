@@ -27,9 +27,9 @@ class ChessPiece(ABC):
     def is_valid_move(self, move: Move, board):  # deleted type hint
         if move.from_col == move.to_col and move.from_row == move.to_row:
             return False
-        elif 0 > move.to_row > 7 or 0 > move.to_col > 7:
+        elif (move.to_row < 0 or move.to_row > (len(board)-1)) or (move.to_col < 0 or move.to_col > len(board[0])-1):
             return False
-        elif board[move.from_row][move.from_col] is None:
+        elif board[move.from_row][move.from_col] is not self:
             return False
         elif board[move.to_row][move.to_col] is not None:
             if board[move.to_row][move.to_col].player.name is self.player.name:
