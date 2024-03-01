@@ -39,6 +39,9 @@ class Pawn(ChessPiece):
                 if move.from_row == 1:
                     if ydist > 2:
                         return False
+                    elif ydist == 2:
+                        if board[move.to_row-1][move.to_col] is not None:
+                            return False
                 elif ydist > 1:
                         return False
 
@@ -57,6 +60,9 @@ class Pawn(ChessPiece):
                 if move.from_row == 6:
                     if ydist < -2:
                         return False
+                    elif ydist == -2:
+                        if board[move.to_row+1][move.to_col] is not None:
+                            return False
                 elif ydist < -1:
                         return False
             return True

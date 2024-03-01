@@ -240,3 +240,4 @@ class ChessModel:
             raise UndoException
 
 
+# create ai
