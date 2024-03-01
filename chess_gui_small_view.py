@@ -24,6 +24,7 @@ class SpriteColor(Enum):
 class GUI:
     first = True
     def __init__(self) -> None:
+        self.AI_TF = False
         pg.init()
         self.__model = ChessModel()
         self._screen = pg.display.set_mode((800, 600))
@@ -65,6 +66,8 @@ class GUI:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     running = False
+
+                self.__model.ai_dumb(self.AI_TF)
                 if event.type == pg.MOUSEBUTTONDOWN:
                     x, y = pg.mouse.get_pos()
                     y, x = self.__get_coords__(y, x)

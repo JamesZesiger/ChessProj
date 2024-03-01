@@ -1,7 +1,7 @@
 from copy import deepcopy
 from enum import Enum
 from typing import List
-
+import random
 import move
 from player import Player
 from move import Move
@@ -240,4 +240,18 @@ class ChessModel:
             raise UndoException
 
 
-# create ai
+    def ai_dumb(self, TF):
+        if TF and self.current_player is Player.BLACK:
+            while 1:
+                if not self.is_complete():
+                    row = random.randrange(0,7)
+                    col = random.randrange(0,7)
+                    if self.board[row][col] is not None:
+                        if self.board[row][col].player is Player.BLACK:
+                            for y in range(0,8):
+                                for x in range(0, 8):
+                                    if self.is_valid_move(Move(row,col,y,x)):
+                                        self.move(Move(row,col,y,x))
+                                        return None
+        else:
+            return None
