@@ -1,7 +1,7 @@
 from copy import deepcopy
 from enum import Enum
 from typing import List
-import random
+
 import move
 from player import Player
 from move import Move
@@ -14,13 +14,21 @@ from queen import Queen
 from king import King
 from move import Move
 
+
 class MoveValidity(Enum):
+    """
+    Enum base class with different move types defined
+    """
     Valid = 1
     Invalid = 2
     MovingIntoCheck = 3
     StayingInCheck = 4
 
     def __str__(self):
+        """
+        Check which enum is valid and prints out the corresponding message, used in "chat" for the game
+        :return: a string corresponding to defined enum
+        """
         if self.value == 2:
             return 'Invalid move.'
 
@@ -33,10 +41,20 @@ class MoveValidity(Enum):
 
 # TODO: create UndoException
 class UndoException(Exception):
+    """
+    If undo is not possible anymore, pass this exception
+    """
     pass
 
+
 class ChessModel:
+    """
+    The ChessModel setups all the pieces for each team and creates the board using those pieces
+    """
     def __init__(self):
+        """
+        Initializes all pieces for both teams. Then creates a list of lists that represent the board.
+        """
         wk = King(Player.WHITE)
         wp0 = Pawn(Player.WHITE)
         wp1 = Pawn(Player.WHITE)
@@ -92,63 +110,108 @@ class ChessModel:
 
     @property
     def nrows(self):
+        """
+        Property getter for the row chosen on the board
+        :return: the number of rows
+        """
         return self.__nrows
 
     @nrows.setter
     def nrows(self, rows):
+        """
+        Setter for the nrows property
+        :param rows: the new row selected
+        :return: none
+        """
         self.__nrows = rows
 
     @property
     def ncols(self):
+        """
+        This is the property getter for the number of the col chosen
+        :return: column number
+        """
         return self.__ncols
 
     @ncols.setter
     def ncols(self, cols):
+        """
+        Property setter for the chosen column
+        :param cols: the new col selected
+        :return: none
+        """
         self.__ncols = cols
 
     @property
     def current_player(self):
+        """
+        property getter for the turn of the current player
+        :return: the player enum
+        """
         return self.__player
 
     @current_player.setter
     def current_player(self, Player):
+        """
+        Setter property for the current player
+        :param Player: selected player
+        :return: none
+        """
         self.__player = Player
 
     @property
     def messageCode(self):
+        """
+        Property getter for the message code that is sent out to the "chat"
+        :return: the current message code
+        """
         return self.__message_code
 
     @messageCode.setter
     def messageCode(self, message):
+        """
+        property setter for the message code
+        :param message: new message
+        :return: none
+        """
         self.__message_code = message
 
     def is_complete(self):
+        """
+        Checks whether the game is in checkmate and ends it accordingly
+        :return: true or false
+        """
         if not self.in_check(Player.WHITE) and not self.in_check(Player.BLACK):
+            # Check whether any of the pieces are in check
             return False
         for x in range(2):
+            # Loop through players
             if self.in_check(self.current_player):
-                for y in range(0,8):
+                # CHeck whether in check for correct player
+                for y in range(0,8):        # Loop through board
                     for x in range(0, 8):
-                        if self.board[y][x] is not None:
+                        if self.board[y][x] is not None:        # Check for piece on board
                             if self.board[y][x].player.name is self.current_player.name:
+                                # Check for enemy player piece and loop through all possible moves
                                 for j in range(0, 8):
                                     for i in range(0, 8):
                                         move = Move(y,x,j,i)
-                                        if self.is_valid_move(move):
+                                        if self.is_valid_move(move):    # Check whether that move was valid
                                             return False
             self.set_next_player()
-
         else:
             return True
 
-        return False
-
-
     def is_valid_move(self, move: Move):
-        piece = self.board[move.from_row][move.from_col]
-        if piece is not None:
-            if piece.is_valid_move(move, self.board):
-                if self.in_check(self.current_player): # staying
+        """
+        Check for valid move in terms of game logic, not whether the piece can move to the new spot.
+        :param move: move class with start and end location
+        :return: true or false
+        """
+        piece = self.board[move.from_row][move.from_col]    # var for selected piece
+        if piece is not None:   # Check whether its a piece at all
+            if piece.is_valid_move(move, self.board):   # if it can make default move continue
+                if self.in_check(self.current_player):  # If in check dont move unless out of check
                     self.move(move)
                     self.set_next_player()
                     if self.in_check(self.current_player):
@@ -240,18 +303,3 @@ class ChessModel:
             raise UndoException
 
 
-    def ai_dumb(self, TF):
-        if TF and self.current_player is Player.BLACK:
-            while 1:
-                if not self.is_complete():
-                    row = random.randrange(0,7)
-                    col = random.randrange(0,7)
-                    if self.board[row][col] is not None:
-                        if self.board[row][col].player is Player.BLACK:
-                            for y in range(0,8):
-                                for x in range(0, 8):
-                                    if self.is_valid_move(Move(row,col,y,x)):
-                                        self.move(Move(row,col,y,x))
-                                        return None
-        else:
-            return None
