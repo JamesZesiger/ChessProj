@@ -7,29 +7,48 @@ from pawn import Pawn
 
 
 class Rook(ChessPiece):
+    """
+    The Rook class is a child of the ChessPiece class
+    """
     def __init__(self, Player):
+        """
+        Initialize as a child of the ChessPiece class using super() method
+        :param Player: team color of piece
+        """
         super().__init__(Player)
 
-
-
     def __str__(self):
+        """
+        Print the team color of the piece
+        :return: player color
+        """
         return f'player is {self.player}'
 
     def type(self):
+        """
+        Return the type of piece
+        :return: Rook
+        """
         return f'Rook'
 
     def is_valid_move(self, move: Move, board: List[List[ChessPiece]]):
-        if ChessPiece.is_valid_move(self,move,board):
-            xdist = abs(move.to_col - move.from_col)
-            ydist = abs(move.to_row - move.from_row)
+        """
+        Check whether the move is valid, specified for a Rook's moveset
+        :param move: move class with start and end locations
+        :param board: list of lists depicting a board
+        :return: true or false
+        """
+        if ChessPiece.is_valid_move(self,move,board):   # Check for default move validity from ChessPiece
+            xdist = abs(move.to_col - move.from_col)    # absolute value of x distance
+            ydist = abs(move.to_row - move.from_row)    # absolute value of y distance
             if (move.to_col - move.from_col != 0) and (move.to_row - move.from_row == 0):
-                # Moving Horizontally
-                if xdist == 1:
+                # Check whether Moving Horizontally
+                if xdist == 1:  # If moving only 1 square
                     if board[move.to_row][move.to_col] is None or board[move.to_row][move.to_col].player.name is not self.player.name:
                         return True
                     else:
                         return False
-                if move.to_col - move.from_col > 0:
+                if move.to_col - move.from_col > 0:     # If vertically check all cases between start and end location
                     for i in range(move.from_col+1,move.to_col):
                         if board[move.from_row][i] is not None:
                             return False
@@ -40,7 +59,7 @@ class Rook(ChessPiece):
                             return False
                     return True
             elif (move.to_col - move.from_col == 0) and (move.to_row - move.from_row != 0):
-                # Moving Vertically
+                # If moving horizontally, check all cases between start and end locations unless moving one space
                 if ydist == 1:
                     if board[move.to_row][move.to_col] is None or board[move.to_row][move.to_col].player.name is not self.player.name:
                         return True
@@ -62,23 +81,5 @@ class Rook(ChessPiece):
                             return False
                     return True
             else:
-                # Not moving Vertically or Horizontally
+                # Not moving Vertically or Horizontally so not allowed for a rook
                 return False
-
-'''
-class x(Enum):
-    WHITE = 0
-    BLACK = 1
-c = Rook(x.WHITE)
-p = Pawn(x.BLACK)
-m = Move(0,3,5,3)
-board = [[None,None,None,c,None,None,None,None],
-        [None,None,None,None,p   ,None,None,None],
-        [p,None,None,None,None,p,None,None],
-        [None,None,None,None,None,None,p,None],
-        [None,None,c,None,None,None,None,None],
-        [None,None,None,c,None,None,None,None],
-        [None,None,None,None,c   ,None,None,None],
-        [None,None,None,None,None,None,None,None]]
-print(c.is_valid_move(m,board))
-'''

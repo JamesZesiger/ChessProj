@@ -6,10 +6,13 @@ from chess_model import ChessModel, MoveValidity, UndoException
 from move import Move
 from player import Player
 
-IMAGE_SIZE = 52  #small format - images 52 X 52
+IMAGE_SIZE = 52  # small format - images 52 X 52
 
 
 class SpriteType(Enum):
+    """
+    This class contains the Enum values and associated name variables for what type of piece the object will be
+    """
     King = 0
     Queen = 1
     Bishop = 2
@@ -17,14 +20,19 @@ class SpriteType(Enum):
     Rook = 4
     Pawn = 5
 
+
 class SpriteColor(Enum):
+    """
+    this class determines the color of the piece using enum
+    """
     WHITE = 0
     BLACK = 1
 
+
 class GUI:
     first = True
+
     def __init__(self) -> None:
-        self.AI_TF = False
         pg.init()
         self.__model = ChessModel()
         self._screen = pg.display.set_mode((800, 600))
@@ -66,8 +74,6 @@ class GUI:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     running = False
-
-                self.__model.ai_dumb(self.AI_TF)
                 if event.type == pg.MOUSEBUTTONDOWN:
                     x, y = pg.mouse.get_pos()
                     y, x = self.__get_coords__(y, x)
