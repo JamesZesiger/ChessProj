@@ -1,4 +1,9 @@
-from enum import Enum
+"""
+This modules purpose is to create the king piece
+Author: James Zesiger, Quentin Daniere, Evan Bower
+Date: 3/11/2024
+Version: 1
+"""
 from typing import List
 from chess_piece import ChessPiece
 from move import Move
@@ -9,6 +14,11 @@ class King(ChessPiece):
     Initialize the King class as a chesspiece using the super() method
     """
     def __init__(self, Player):
+        """
+        constructor for king piece
+        Parameter:
+            Player: player ownership of piece
+        """
         super().__init__(Player)
 
 
@@ -16,14 +26,16 @@ class King(ChessPiece):
     def __str__(self):
         """
         What team the piece belongs to
-        :return: f'player is {self.player}'
+
+        Returns: f'player is {self.player}'
         """
         return f'player is {self.player}'
 
     def type(self):
         """
         the type of piece it is
-        :return: 'King'
+
+        Returns: 'King'
         """
         return 'King'
 
@@ -31,9 +43,10 @@ class King(ChessPiece):
         """
         A modified version of the is_valid_move method of the chess_piece class parent. It calls that method for general
         checks before checking for King specific movement validity.
-        :param move: input from move class, denoting start and end location
-        :param board: the current board in play with all the pieces
-        :return:
+        Parameters:
+            move: input from move class, denoting start and end location
+            board: the current board in play with all the pieces
+        Returns: bool
         """
         if ChessPiece.is_valid_move(self, move, board):
             # Check overall validity from chess_piece class

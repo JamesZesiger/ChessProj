@@ -1,6 +1,10 @@
-from enum import Enum
+"""
+This modules purpose is to create the pawn piece
+Author: James Zesiger, Quentin Daniere, Evan Bower
+Date: 3/11/2024
+Version: 1
+"""
 from typing import List
-
 from chess_piece import ChessPiece
 from move import Move
 
@@ -12,30 +16,36 @@ class Pawn(ChessPiece):
     def __init__(self, Player):
         """
         Initialize class as a child of ChessPiece using super() method
-        :param Player: team color of piece
+        Parameters:
+             Player: team color of piece
         """
         super().__init__(Player)
 
     def __str__(self):
         """
         Returns team color of piece
-        :return: player team color
+
+        Returns: player team color
         """
         return f'player is {self.player}'
 
     def type(self):
         """
         Returns type of piece
-        :return: Pawn
+
+        Returns: Pawn
         """
         return 'Pawn'
 
     def is_valid_move(self, move: Move, board: List[List[ChessPiece]]):
         """
         Determines whether the move is valid according to the move-set of the pawn
-        :param move: move class containing start and end locations
-        :param board: list of lists that creates a chessboard
-        :return: true or false
+
+        Parameters:
+            move: move class containing start and end locations
+            board: list of lists that creates a chessboard
+
+        Returns: true or false
         """
         if ChessPiece.is_valid_move(self, move, board):     # Check default move-set according to ChessPiece
             xdist = abs(move.to_col - move.from_col)    # Absolute value of x distance
@@ -64,7 +74,7 @@ class Pawn(ChessPiece):
                 elif ydist > 1:
                         return False
 
-            if self.player.name == 'WHITE': # Check whether on the white team, repeat checks above but in other direction
+            if self.player.name == 'WHITE':  # Check whether on the white team, repeat checks above but in other direction
                 if xdist == 1 and ydist != -1:
                     return False
                 if xdist == 1:

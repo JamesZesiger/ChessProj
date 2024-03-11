@@ -1,6 +1,5 @@
 from enum import Enum
 from typing import List
-
 from chess_piece import ChessPiece
 from move import Move
 

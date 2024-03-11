@@ -1,5 +1,9 @@
-from enum import Enum
-
+"""
+This modules purpose is to create queen piece
+Author: James Zesiger, Quentin Daniere, Evan Bower
+Date: 3/11/2024
+Version: 1
+"""
 from chess_piece import ChessPiece
 from move import Move
 from bishop import Bishop
@@ -13,30 +17,32 @@ class Queen(ChessPiece):
     def __init__(self, Player):
         """
         intialize queen piece using super() method
-        :param Player: player color of piece
+        Parameters:
+             Player: player color of piece
         """
         super().__init__(Player)
 
     def __str__(self):
         """
         Returns the team color of the piece
-        :return: player color
+        Returns: player color
         """
         return f'player is {self.player}'
 
     def type(self):
         """
         Returns the type of piece
-        :return: Queen
+        Return: Queen
         """
         return f'Queen'
 
     def is_valid_move(self, move: Move, board) -> bool:
         """
         Since the queen moves like a bishop or a rook, if either of their moves are valid, the queen can move as well
-        :param move: move class containing start location and end location
-        :param board: list of lists that creates the chessboard
-        :return: true or false
+        Parameters:
+            move: move class containing start location and end location
+            board: list of lists that creates the chessboard
+        Return: true or false
         """
         if ChessPiece.is_valid_move(self, move, board):     # Check for default move validity
             if Rook.is_valid_move(self, move, board) or Bishop.is_valid_move(self, move, board):

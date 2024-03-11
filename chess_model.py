@@ -4,7 +4,6 @@ Author: James Zesiger, Quentin Daniere, Evan Bower
 Date: 3/11/2024
 Version: 1
 """
-
 import random
 from enum import Enum
 from player import Player

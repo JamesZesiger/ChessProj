@@ -1,9 +1,12 @@
-from enum import Enum
+"""
+This modules purpose is to create the chess game functions
+Author: James Zesiger, Quentin Daniere, Evan Bower
+Date: 3/11/2024
+Version: 1
+"""
 from typing import List
-
 from chess_piece import ChessPiece
 from move import Move
-from pawn import Pawn
 
 
 class Rook(ChessPiece):
@@ -13,30 +16,36 @@ class Rook(ChessPiece):
     def __init__(self, Player):
         """
         Initialize as a child of the ChessPiece class using super() method
-        :param Player: team color of piece
+
+        Parameters:
+             Player: team color of piece
         """
         super().__init__(Player)
 
     def __str__(self):
         """
         Print the team color of the piece
-        :return: player color
+
+        Returns: player color
         """
         return f'player is {self.player}'
 
     def type(self):
         """
         Return the type of piece
-        :return: Rook
+
+        Returns: Rook
         """
         return f'Rook'
 
     def is_valid_move(self, move: Move, board: List[List[ChessPiece]]):
         """
         Check whether the move is valid, specified for a Rook's moveset
-        :param move: move class with start and end locations
-        :param board: list of lists depicting a board
-        :return: true or false
+        Parameters
+            move: move class with start and end locations
+            board: list of lists depicting a board
+
+        Returns: True or False
         """
         if ChessPiece.is_valid_move(self,move,board):   # Check for default move validity from ChessPiece
             xdist = abs(move.to_col - move.from_col)    # absolute value of x distance
